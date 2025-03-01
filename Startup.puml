@@ -1,0 +1,11 @@
+ParentClass <|-- MyClass
+MyClass -> HelperClass
+class HelperClass {
+    attribute1
+    attribute2
+    ---
+    some_method1()
+    another_method()
+    ---
+
+}

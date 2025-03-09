@@ -1,5 +1,6 @@
 package frc.robot.util;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Limit {
@@ -10,7 +11,7 @@ public class Limit {
         this.max = max;
         this.min = min;
         if (min > max) {
-            System.out.println("*** ERROR Limit Min is greater than LIMIT Max ***");
+          DriverStation.reportError("ERROR LIMIT kMIN is greater than LIMIT kMAX:  ",true);
         }
     }
 

@@ -1,10 +1,6 @@
-/*----------------------------------------------------------------------------*/
-/* Copyright (c) 2017-2018 FIRST. All Rights Reserved.                        */
-/* Open Source Software - may be modified and shared by FRC teams. The code   */
-/* must be accompanied by the FIRST BSD license file in the root directory of */
-/* the project.                                                               */
-/*----------------------------------------------------------------------------*/
-
+// Defines a subsystem for the 2025 robot
+// Written by the Osage FRC Robotics Team Tech Devils
+// This subsystem uses the SparkMax motor controller to control the elevator position and slew rate
 package frc.robot.subsystem;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
@@ -32,10 +28,10 @@ public class Elevator extends TimedRobot {
   private SparkMaxConfig motorFollowerConfig;
   private SparkClosedLoopController closedLoopController;
   private RelativeEncoder encoder;
-  SlewRateLimiter slewRateLimiter = new SlewRateLimiter(Constants.ElevatorConstants.kSlewSpeedGoTo);
-  SlewRateLimiter slewManual = new SlewRateLimiter(Constants.ElevatorConstants.kSlewSpeedManual);
-  Limit _limit = new Limit(0.0, Constants.ElevatorConstants.kMmaxPosition);
-  Lowpass lowpass = new Lowpass(1*Constants.Utilities.kDT);
+  SlewRateLimiter slewRateLimiter = new SlewRateLimiter(Constants.kElevator.kSlewSpeedGoTo);
+  SlewRateLimiter slewManual = new SlewRateLimiter(Constants.kElevator.kSlewSpeedManual);
+  Limit _limit = new Limit(0.0, Constants.kElevator.kMmaxPosition);
+  Lowpass lowpass = new Lowpass(Constants.kElevator.kSlewLowpassFilter*Constants.kUtility.kDT);
 
   double _positionCommand = 0;
 
@@ -44,11 +40,11 @@ public class Elevator extends TimedRobot {
      * Initialize the SPARK MAX and get its encoder and closed loop controller
      * objects for later use.
      */
-    motor = new SparkMax(4, MotorType.kBrushless);
+    motor = new SparkMax(Constants.kMotor.kElevatorMotor1, MotorType.kBrushless);
     closedLoopController = motor.getClosedLoopController();
     encoder = motor.getEncoder();
 
-    motorFollower = new SparkMax(2, MotorType.kBrushless);
+    motorFollower = new SparkMax(Constants.kMotor.kElevatorMotor2, MotorType.kBrushless);
     /*
      * Create a new SPARK MAX configuration object. This will store the
      * configuration parameters for the SPARK MAX that we will set below.
@@ -77,9 +73,9 @@ public class Elevator extends TimedRobot {
         .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
         // Set PID values for position control. We don't need to pass a closed loop
         // slot, as it will default to slot 0.
-        .p(Constants.ElevatorConstants.kP)
-        .i(Constants.ElevatorConstants.kI)
-        .d(Constants.ElevatorConstants.kD)
+        .p(Constants.kElevator.kP)
+        .i(Constants.kElevator.kI)
+        .d(Constants.kElevator.kD)
         .outputRange(-1, 1);
     /*
      * Apply the configuration to the SPARK MAX.
